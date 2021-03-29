@@ -10,15 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_27_012112) do
+ActiveRecord::Schema.define(version: 2021_03_29_155408) do
 
   create_table "beers", force: :cascade do |t|
-    t.string "brand"
-    t.string "subbrand"
     t.string "beer_type"
     t.decimal "alcvol"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "brand_id"
+    t.index ["brand_id"], name: "index_beers_on_brand_id"
   end
 
+  create_table "brands", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "text"
+    t.decimal "rating"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
+    t.integer "beer_id"
+    t.index ["beer_id"], name: "index_reviews_on_beer_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "beers", "brands"
+  add_foreign_key "reviews", "beers"
+  add_foreign_key "reviews", "users"
 end
